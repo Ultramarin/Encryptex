@@ -1,9 +1,14 @@
 # coding=utf-8
 from random import randint
 import random
-
+import helpers
 
 def user_diag_EK(max_int_const=26):
+    """
+    Инициирует диалог с пользователем. Для получения шифровочного ключа.
+    Выполняет его проверку, в случае ввода ключа пользователем.
+    Возвращает - готовый шифровочный ключ, размером 26 символом
+    """
     question1 = 'Вы имеете ключ шифрования верхнего уровня? yes/no\n'
     question2 = 'Введите ключ шифрования верхнего уровня.\n'
     answer1 = 'Длина ключа шифрования должна быть равна %s символам, а так же должна состоять из A-Z' % max_int_const
@@ -13,7 +18,6 @@ def user_diag_EK(max_int_const=26):
     def generate_new_encrypt_key(max_int_const=26):
         """
         Генерирует случайную последовательность букв - состоящую из английского алфавита.
-        slice - подать данные в виде - строки разбитой на два элемента, в составе списка.
         Длина каждой строки 13 букв - половина алфавита.
         В случае если slice не указан - функция даст на выходе строку из перемешанных букв английского алфавита.
         """
@@ -28,6 +32,14 @@ def user_diag_EK(max_int_const=26):
 
     def EK_check(encrypt_key, max_int_const=26):
         """
+        Прооверяет ключ.
+        :param encrypt_key:
+        :param max_int_const:
+        Правильно введенный ключ идентефицируется по следующим признакам:
+        Длина 26 символов.
+        Ключ состоит из латиницы.
+        Ключ не содержит символов.
+        Буквы в ключе не повторяются.
 
         """
         example_key = generate_new_encrypt_key()
@@ -58,67 +70,21 @@ def user_diag_EK(max_int_const=26):
     return encrypt_key
 
 
-def get_random_rus_letters(quantity=13):
-    """
-    Generate a n-length string of russian letters.
-    """
-
-    ruskey_list = []
-    rus_alfabet_dict = {1: '\xd0\x90', 2: '\xd0\x91', 3: '\xd0\x92', 4: '\xd0\x93',
-                        5: '\xd0\x94', 6: '\xd0\x95', 7: '\xd0\x81', 8: '\xd0\x96',
-                        9: '\xd0\x97', 10: '\xd0\x98', 11: '\xd0\x99', 12: '\xd0\x9a',
-                        13: '\xd0\x9b', 14: '\xd0\x9c', 15: '\xd0\x9d', 16: '\xd0\x9e',
-                        17: '\xd0\x9f', 18: '\xd0\xa0', 19: '\xd0\xa1', 20: '\xd0\xa2',
-                        21: '\xd0\xa3', 22: '\xd0\xa4', 23: '\xd0\xa5', 24: '\xd0\xa6',
-                        25: '\xd0\xa7', 26: '\xd0\xa8', 27: '\xd0\xa9', 28: '\xd0\xaa',
-                        29: '\xd0\xab', 30: '\xd0\xac', 31: '\xd0\xad', 32: '\xd0\xae',
-                        33: '\xd0\xaf'}
-
-    for x in xrange(quantity):
-        #TODO: make it constant
-        randletter = rus_alfabet_dict.get(randint(1, 33)).decode("utf8")
-        ruskey_list.append(randletter)
-
-    return ruskey_list
-
-
-def keytablegen():
-    keytable = []
-
-    #TODO: make it constant
-    for x in xrange(13):
-        keytable.append(get_random_rus_letters())
-
-    return keytable
-
-
-def key_in_alfabet(key):
-    rus = "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя"
-    rus = rus.decode('utf8')
-    logical_key = ''
-    for x in key:
-        if x in rus:
-            logical_key += x
-    if len(logical_key) == len(key):
-        return True
-    else:
-        return False
-
-
-def print_board(var):
-    for x in var:
-        print " ".join(x)
-
-
-def generate_x_axis(tabname):
-    return randint(0, len(tabname) - 1)
-
-
-def generate_y_axis(tabname):
-    return randint(0, len(tabname[0]) - 1)
-
-
 def gen_x_y_list(input_text, tabname):
+    """
+    Генерирует список случайных координат,
+    длина которого равна длине введенного текста
+    """
+    def generate_x_axis(tabname):
+        #Генерирует случайную координату, в оси х. Для матрицы
+        return randint(0, len(tabname) - 1)
+
+
+    def generate_y_axis(tabname):
+        #Генерирует случайную координату, в оси y. Для матрицы
+        return randint(0, len(tabname[0]) - 1)
+
+
     coordinates_listXY = []
     input_text_length = len(input_text)
     while True:
@@ -134,6 +100,9 @@ def gen_x_y_list(input_text, tabname):
 
 
 def encrypt_text(input_text, coordinates_list, tab_name):
+    """
+    Раскидывает введенный текст - по матрице(используя сгенерированные верхней функцией координаты)
+    """
     input_text = input_text
     counter = -1
     for x in coordinates_list:
@@ -142,6 +111,9 @@ def encrypt_text(input_text, coordinates_list, tab_name):
 
 
 def gen_decode_key(coordinates_list, encode_key):
+    """
+    Генерирует дешифровочный ключ(второй из ключей)
+    """
     encode_key_x = encode_key[:13]
     encode_key_y = encode_key[13:]
     decode_key = ''
@@ -155,6 +127,9 @@ def gen_decode_key(coordinates_list, encode_key):
 
 
 def gen_encoded_text_string(tab_name):
+    """
+    Превращает матрицу в строку текста
+    """
     encoded_text = ''
 
     for x in tab_name:
@@ -164,6 +139,10 @@ def gen_encoded_text_string(tab_name):
 
 
 def user_diag(tabname):
+    """
+    Инициализация диалога с пользователем.
+    В ходе которой - происходит шифрация введенного пользователем текста
+    """
     question1 = u'Введите текст для шифрования.' \
                 u' Текст должен состоять только из русских букв. Без использования символов \n'
     dk_enctext = (1, 2)
@@ -172,7 +151,7 @@ def user_diag(tabname):
         text_to_encode = raw_input(question1)
         text_to_encode = text_to_encode.decode('utf8')
         text_to_encode = text_to_encode.upper()
-        if key_in_alfabet(text_to_encode):
+        if helpers.key_in_alfabet(text_to_encode):
             coordinates_list = gen_x_y_list(text_to_encode, tabname)
             #Генерируем рандомный список координат, длиной - равной длине введенного текста.
 
@@ -194,8 +173,7 @@ def user_diag(tabname):
             break
 
 
-table = keytablegen()
+table = helpers.keytablegen()
 
 user_diag(table)
 
-print_board(table)
