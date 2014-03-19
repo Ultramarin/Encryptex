@@ -1,5 +1,6 @@
 # coding=utf-8
 from random import randint
+import random
 
 
 def keytablegen(quantity=13, max_int=33, min_int=1):
@@ -42,20 +43,71 @@ def print_board(var):
         print " ".join(x)
 
 
-def key_in_alfabet(key):
+def key_in_alfabet(key, lang):
     """
-    Проверяет вводимый текст на принадлежность к русскому алфавиту.
+    Проверяет вводимый текст на принадлежность к русскому\английский алфавиту.
     В противном случае возвращет False
 
+    :param key:
     """
     rus = "АаБбВвГгДдЕеЁёЖжЗзИиЙйКкЛлМмНнОоПпРрСсТтУуФфХхЦцЧчШшЩщЪъЫыЬьЭэЮюЯя"
     rus = rus.decode('utf8')
+    eng = 'QqWwEeRrTtYyUuIiOoPpAaSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm'
     logical_key = ''
+    language = None
+    if lang == 'rus':
+        language = rus
+    elif lang == 'eng':
+        language = eng
+    else:
+        raise Exception('lang parameter may be "eng" or "rus"')
+
     for x in key:
-        if x in rus:
+        if x in language:
             logical_key += x
     if len(logical_key) == len(key):
         return True
     else:
         return False
 
+
+def generate_new_encrypt_key(max_int_const=26):
+    """
+        Генерирует случайную последовательность букв - состоящую из английского алфавита.
+        Длина каждой строки 13 букв - половина алфавита.
+        В случае если slice не указан - функция даст на выходе строку из перемешанных букв английского алфавита.
+        """
+    input_ = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z'
+    inputted_keys = input_.split(',')
+
+    mixed_alfabet = random.sample(inputted_keys, max_int_const)
+    encrypt_key = ''
+    for x in mixed_alfabet:
+        encrypt_key += x
+    return encrypt_key.lower()
+
+
+def EK_check(encrypt_key, max_int_const=26):
+    """
+    Прооверяет ключ.
+    :param encrypt_key:
+    :param max_int_const:
+    Правильно введенный ключ идентефицируется по следующим признакам:
+    Длина 26 символов.
+    Ключ состоит из латиницы.
+    Ключ не содержит символов.
+    Буквы в ключе не повторяются.
+
+    """
+    example_key = generate_new_encrypt_key()
+    checker = ''
+
+    for x in encrypt_key:
+        if x in example_key:
+            checker += x
+
+    if len(checker) == max_int_const:
+        return True
+
+    else:
+        return False

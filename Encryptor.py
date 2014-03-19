@@ -3,6 +3,7 @@ from random import randint
 import random
 import helpers
 
+
 def user_diag_EK(max_int_const=26):
     """
     Инициирует диалог с пользователем. Для получения шифровочного ключа.
@@ -15,54 +16,18 @@ def user_diag_EK(max_int_const=26):
     answer2 = "Сохраните сгенерированный ключ. Он необходим для дальнейшего дешифрования."
     encrypt_key = None
 
-    def generate_new_encrypt_key(max_int_const=26):
-        """
-        Генерирует случайную последовательность букв - состоящую из английского алфавита.
-        Длина каждой строки 13 букв - половина алфавита.
-        В случае если slice не указан - функция даст на выходе строку из перемешанных букв английского алфавита.
-        """
-        input_ = 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z'
-        inputted_keys = input_.split(',')
 
-        mixed_alfabet = random.sample(inputted_keys, max_int_const)
-        encrypt_key = ''
-        for x in mixed_alfabet:
-            encrypt_key += x
-        return encrypt_key.lower()
-
-    def EK_check(encrypt_key, max_int_const=26):
-        """
-        Прооверяет ключ.
-        :param encrypt_key:
-        :param max_int_const:
-        Правильно введенный ключ идентефицируется по следующим признакам:
-        Длина 26 символов.
-        Ключ состоит из латиницы.
-        Ключ не содержит символов.
-        Буквы в ключе не повторяются.
-
-        """
-        example_key = generate_new_encrypt_key()
-        checker = ''
-
-        for x in encrypt_key:
-            if x in example_key:
-                checker += x
-        if len(checker) == max_int_const:
-            return True
-        else:
-            return False
 
     while True:
         user_answer = raw_input(question1)
         if user_answer == 'yes':
             encrypt_key = raw_input(question2)
-            if EK_check(encrypt_key):
+            if helpers.EK_check(encrypt_key):
                 break
             else:
                 print answer1
         elif user_answer == 'no':
-            encrypt_key = generate_new_encrypt_key()
+            encrypt_key = helpers.generate_new_encrypt_key()
             print answer2
             break
 
@@ -75,6 +40,7 @@ def gen_x_y_list(input_text, tabname):
     Генерирует список случайных координат,
     длина которого равна длине введенного текста
     """
+
     def generate_x_axis(tabname):
         #Генерирует случайную координату, в оси х. Для матрицы
         return randint(0, len(tabname) - 1)
@@ -151,7 +117,7 @@ def user_diag(tabname):
         text_to_encode = raw_input(question1)
         text_to_encode = text_to_encode.decode('utf8')
         text_to_encode = text_to_encode.upper()
-        if helpers.key_in_alfabet(text_to_encode):
+        if helpers.key_in_alfabet(text_to_encode, "rus"):
             coordinates_list = gen_x_y_list(text_to_encode, tabname)
             #Генерируем рандомный список координат, длиной - равной длине введенного текста.
 
