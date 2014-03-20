@@ -13,7 +13,7 @@ def user_diag_encripted_text():
         else:
             break
 
-        return ET
+    return ET
 
 def user_diag_EK_decrypt(max_int_const=26):
     """
