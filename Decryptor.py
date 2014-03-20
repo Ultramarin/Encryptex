@@ -1,5 +1,20 @@
 import helpers
 # coding=utf-8
+def user_diag_encripted_text():
+    """
+    Инициирует диалог с пользователем. Для получения зашыврованого текста.
+    Выполняет его проверку, в случае ввода пользователем правильно текста то
+    Возвращает зашыврований текст , размером 169 символов
+    """
+    while True:
+        ET = raw_input('Введите зашыврований текст')
+        if len(ET) >169 and ET not in  helpers.keytablegen(ET, leng='eng'):
+            print ('')
+        else:
+            break
+
+        return ET
+
 def user_diag_EK_decrypt(max_int_const=26):
     """
     Инициирует диалог с пользователем. Для получения шифровочного ключа.
